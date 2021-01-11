@@ -1,0 +1,1 @@
+# Trait과 Type
