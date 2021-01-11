@@ -25,5 +25,6 @@ deploy:
   local-dir: book
   keep-history: false
   on:
-    branch: master
+    push:
+      branch: master
   target_branch: gh-pages
