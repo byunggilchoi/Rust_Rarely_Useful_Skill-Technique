@@ -1,6 +1,4 @@
-# Trait과 Type을 함께 사용하는 방법들
-
-## `type` 키워드
+# `type` 키워드
 
 두 가지 경우에 사용됩니다. 원래는 타입 별칭(type alias)을 달기 위해서 있는 건데 '연관 타입(associaed type)' 구현에도 사용합니다.
 
@@ -8,7 +6,7 @@
 
 이번 장에서는 두 가지 사용처를 먼저 보고 왜 그렇게 사용하는지 생각해보겠습니다.
 
-### 타입 별칭(type alias) 작성: 기본 기능
+## 타입 별칭(type alias) 작성: 기본 기능
 
 타입 별칭이란 어떠한 타입을 정의하고 거기에 이름을 붙이는 것입니다. 즉 두 개는 서로 동치입니다.
 
@@ -40,9 +38,9 @@ Result<T> = Result<T, std::io::Error>;
 
 그래서 io::Result 타입을 사용하면 Result의 에러 타입을 정의할 필요가 없습니다. io::Error로 지정되어 있는 Result 타입의 별칭이니까요.
 
-### 연관 타입(associated type) 작성: 응용 기능
+## 연관 타입(associated type) 작성: 응용 기능
 
-연관 타입이란 일종의 타입 플레이스홀더입니다. 플레이스홀더로 지정되었을 때는 무슨 타입인지 모릅니다. 나중에 (`impl`키워드를 써서) 구현할 때 무슨 타입인지 정하면 됩니다.
+연관 타입이란 일종의 타입 플레이스홀더입니다. trait에서 플레이스홀더로 이름만 만들어뒀을 때는 무슨 타입인지 모릅니다. 나중에 (`impl`키워드를 써서) 구현할 때 무슨 타입인지 정하면 됩니다.
 
 - `struct`나 `trait` 키워드로 정의할 때 임의의 타입을 지정해놓는(placeholder) 목적으로 사용.
 
@@ -78,7 +76,18 @@ impl Iterator for Counter {
     }}
 ```
 
-### 컴파일러는 어떻게 구분할까?
+> 연관 아이템(associated item): '연관'이라는 번역어가 적절한 지 잘 모르겠습니다만.
+> associated item은
+>
+> - 어떤 타입과 연관되어 있는 개체로
+> - trait이나 trait의 구현 블록에서 정의합니다.
+> - 3가지 종류가 있습니다.
+>   - associated function: 메서드(첫번째 파라미터가 self인 associated function) 포함.
+>   - associated type
+>   - associated constant
+> - associated type을 제외하면 모두 기본값을 줄 수 있습니다. associated type의 기본값 기능은 아직 불안정한 상태라고 합니다.
+
+## 컴파일러는 어떻게 구분할까?
 
 예시 코드를 하나 만들어서 컴파일러가 알려주는 에러들을 살펴봅시다. 1.49기준으로 나오는 에러들입니다.
 
@@ -145,22 +154,47 @@ impl I for F {
 ```
 
 최대한 많은 경우의 수를 보여드렸는데 정리하면 다음과 같습니다.
-|위치|인식|body|
-|-|-|-|
-|trait 블록|associated type|없어야 함(허용 예정)|
-|trait 구현 블록|associated type|있어야 함|
-|나머지|type alias|있어야 함|
+
+| 위치            | 해석            | body                 |
+| --------------- | --------------- | -------------------- |
+| trait 블록      | associated type | 없어야 함(허용 예정) |
+| trait 구현 블록 | associated type | 있어야 함            |
+| 나머지          | type alias      | 있어야 함            |
 
 trait 블록에서 `fn`키워드(메서드)의 경우에는 시그니처만 있어도 되고 함수 구현이 들어가면 기본값이 됩니다.
 
-그런데 `type`키워드(associated type)는 아직 기본갑을 줄 수 없습니다. [1.49 기준으로 unstable하여](https://github.com/rust-lang/rust/issues/29661) 아직은 기본값을 못 주게 되어 있다고 합니다.
+그런데 `type`키워드(associated type)는 아직 기본값을 줄 수 없습니다. [1.49 기준으로 unstable하여](https://github.com/rust-lang/rust/issues/29661) 아직은 기본값을 지정할 수 없다고 합니다.
 
-### 왜 이렇게 개념이 복잡한가?
+## 왜 이렇게 개념이 복잡한가?
 
-일단 type alias는 많이 쓰고 associated type은 별로 쓰지 않아서 생각만큼 큰 문제는 아닙니다.
+일단 type alias는 많이 쓰고 associated type은 별로 쓰지 않아서 생각만큼 큰 문제는 아닙니다. 그래도 문서의 목적이 별로 유용하지는 않은 내용을 다루는 것이니까 살펴봅시다.
 
-그래도 문서의 목적이 별로 유용하지는 않은 내용을 다루는 것이니까 살펴봅시다.
-
-원래 associated type은 제네릭에서 나온 개념으로 [Rust by Example](https://doc.rust-lang.org/rust-by-example/generics/assoc_items.html)에서는 제네릭 챕터에서 설명합니다.
+원래 associated type은 type alias에서 나온 게 아니라 제네릭에서 나온 개념입니다. 문법만 같은 키워드를 사용할 뿐이죠. 그래서 [Rust by Example](https://doc.rust-lang.org/rust-by-example/generics/assoc_items.html)에서도 associated type을 제네릭 챕터에서 설명합니다.
 
 즉 rust에서 associated type은 제네릭 타입을 써서 표현할 수 있는 코드를 좀 더 간결하게 표현하는데 사용됩니다.
+
+그러면 associated type이라는 개념이 있어서 좋은 점은 무엇일까요?
+
+### trait를 구현할 때 선택의 폭을 넓혀줍니다: 기본
+
+특정 struct에 대해서 trait을 구현할 때 타입을 제한할 수 있습니다. associated type이 아니라 generic type을 이용할 경우에는 하나의 struct에 대해서 같은 trait을 타입 별로 구현할 수도 있겠죠.
+
+일반적으로 struct에 대해서 trait은 특정한 행동을 규정하는 역할을 합니다. 그러므로 같은 struct인데 trait 자체가 타입에 따라 다르게 작동하는 것은 바람직하지는 않다고 생각합니다. 필요하다면 struct가 달라져야겠죠.
+
+### trait 바운드를 사용할 때 표기가 간단해집니다: 부가
+
+trait 바운드를 쓰려면 해당 trait의 시그니처를 표기해야 하는데 associated type을 쓰면 시그니처가 간단해져서 표기가 쉽습니다.(RBE 참조)
+표기가 쉬운 게 뭐 중요하냐 싶을 수 있는데 그래서 부가적 기능이라고 생각합니다.
+
+## 정리
+
+- type 키워드는 위치에 따라 두 가지로 해석됩니다.
+  - type alias: 우변의 타입과 동치인 타입.
+  - associated type: trait과 함께 쓰일 때만. trait 블록에는 시그니처만 가능하고 trait의 구현 블록에서 type alias와 같은 문법으로 타입을 구현해야 합니다.
+- associated type을 쓰는 이유
+  - 하나의 struct에 trait를 하나만 사용하도록 제한 가능
+  - trait 바운드를 사용할 때 표기가 간단해짐
+- 기타: associated item은 특정 타입(struct도 타입입니다!!)과 연관된 개체. trait, struct, 이들의 구현 블록에서 쓰이는
+  - associated function: 메서드를 포함.
+  - associated type
+  - associated constant
