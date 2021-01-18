@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>헷갈리는 개념들 - Rarely Useful Skills &amp; Techniques for Rustaceans</title>
+        <title>에러를 해당 함수 밖으로 보내서 처리하는 방법 - Rarely Useful Skills &amp; Techniques for Rustaceans</title>
         
         
 
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../1_trait_type/index.html"><strong aria-hidden="true">1.</strong> trait과 type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1_trait_type/1_keyword_type.html"><strong aria-hidden="true">1.1.</strong> type 키워드</a></li></ol></li><li class="chapter-item expanded "><a href="../2_confusing/index.html" class="active"><strong aria-hidden="true">2.</strong> 헷갈리는 개념들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2_confusing/1_self_Self.html"><strong aria-hidden="true">2.1.</strong> self, Self</a></li></ol></li><li class="chapter-item expanded "><a href="../3_error/index.html"><strong aria-hidden="true">3.</strong> error를 처리하는 여러 가지 방법들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3_error/1_error_handling_on_the_function.html"><strong aria-hidden="true">3.1.</strong> 에러가 발생한 함수에서 에러를 처리할 경우</a></li><li class="chapter-item expanded "><a href="../3_error/2_bubbling.html"><strong aria-hidden="true">3.2.</strong> 에러를 해당 함수 밖으로 보내서 처리하는 방법</a></li><li class="chapter-item expanded "><a href="../3_error/3_using_custom_error.html"><strong aria-hidden="true">3.3.</strong> 좀 더 일반적인 프로젝트에서 쓸 수 있는 방법: 커스텀 에러 이용</a></li><li class="chapter-item expanded "><a href="../3_error/4_using_error_chain_crate.html"><strong aria-hidden="true">3.4.</strong> 많이 쓰는 방식: error_chain</a></li><li class="chapter-item expanded "><a href="../3_error/5_useful_crates.html"><strong aria-hidden="true">3.5.</strong> 에러 처리에 사용하는 다양한 라이브러리들</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../1_trait_type/index.html"><strong aria-hidden="true">1.</strong> trait과 type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../1_trait_type/1_keyword_type.html"><strong aria-hidden="true">1.1.</strong> type 키워드</a></li></ol></li><li class="chapter-item expanded "><a href="../2_confusing/index.html"><strong aria-hidden="true">2.</strong> 헷갈리는 개념들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../2_confusing/1_self_Self.html"><strong aria-hidden="true">2.1.</strong> self, Self</a></li></ol></li><li class="chapter-item expanded "><a href="../3_error/index.html"><strong aria-hidden="true">3.</strong> error를 처리하는 여러 가지 방법들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../3_error/1_error_handling_on_the_function.html"><strong aria-hidden="true">3.1.</strong> 에러가 발생한 함수에서 에러를 처리할 경우</a></li><li class="chapter-item expanded "><a href="../3_error/2_bubbling.html" class="active"><strong aria-hidden="true">3.2.</strong> 에러를 해당 함수 밖으로 보내서 처리하는 방법</a></li><li class="chapter-item expanded "><a href="../3_error/3_using_custom_error.html"><strong aria-hidden="true">3.3.</strong> 좀 더 일반적인 프로젝트에서 쓸 수 있는 방법: 커스텀 에러 이용</a></li><li class="chapter-item expanded "><a href="../3_error/4_using_error_chain_crate.html"><strong aria-hidden="true">3.4.</strong> 많이 쓰는 방식: error_chain</a></li><li class="chapter-item expanded "><a href="../3_error/5_useful_crates.html"><strong aria-hidden="true">3.5.</strong> 에러 처리에 사용하는 다양한 라이브러리들</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,19 +163,86 @@
 
                 <div id="content" class="content">
                     <main>
-                        
+                        <h1><a class="header" href="#에러를-해당-함수-밖으로-보내서-처리하는-방법" id="에러를-해당-함수-밖으로-보내서-처리하는-방법">에러를 해당 함수 밖으로 보내서 처리하는 방법</a></h1>
+<h2><a class="header" href="#에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다" id="에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다">에러를 일단 상위 모듈로 올려서 조치를 취하고 싶다.</a></h2>
+<ul>
+<li>
+<p>이용할 경우</p>
+<ul>
+<li>에러가 일어난 함수에서는 컨텍스트가 부족해서 정확한 에러 핸들링이 어려워서 발생한 에러를 호출한 함수로 올릴 때</li>
+</ul>
+</li>
+<li>
+<p>이용할 방법들</p>
+<ul>
+<li>?: unwrap()과 같은데 Result를 받아서 에러일 때 panic을 발생시키고 시스템을 종료하는게 아니라 그 에러를 반환
+<ul>
+<li>그러면 반환된 에러를 상위 함수가 받을 수 있음</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+  match file() {
+    Ok(f) =&gt; println!(&quot;{}&quot;, f),
+    Err(e) =&gt; eprintln!(&quot;error\n  {}&quot;, e),
+  }
+}
+
+fn file() -&gt; Result&lt;T, E&gt; {
+  let url = &quot;https://postman-echo.com/time/object&quot;;
+  let result = reqwest::blocking::get(url);
+
+  let response = match result {
+    Ok(res) =&gt; res,
+    Err(err) =&gt; return Err(err),
+  };
+
+  let body = response.json::&lt;HashMap&lt;String, i32&gt;&gt;();
+
+  let json = match body {
+    Ok(json) =&gt; json,
+    Err(err) =&gt; return Err(err),
+  };
+
+  let date = json[&quot;years&quot;].to_string();
+
+  Ok(date)
+}
+</code></pre></pre>
+<h2><a class="header" href="#한-함수에서-여러-종류의-에러가-발생하는-경우" id="한-함수에서-여러-종류의-에러가-발생하는-경우">한 함수에서 여러 종류의 에러가 발생하는 경우</a></h2>
+<p>러스트에서 &quot;에러&quot;는 특정한 타입을 이야기하는 것이 아닙니다. 공부할 때 꽤나 골치아프게 했었을 trait을 이용해서 정의됩니다. std::error::Error trait을 구현한 모든 타입은 &quot;에러&quot;인 거죠.</p>
+<p>그래서 흔히 때에 맞는 에러를 만들어서 씁니다. 왠만한 라이브러리에서도 자기네 에러를 만들어 쓰고 프로그램을 만들때도 전용 에러들을 만들어서 쓰는 경우가 많습니다.</p>
+<p>그래서 한 가지 함수에서 여러 종류의 에러가 발생할 수도 있죠. 그런데 타입 유니언이 안 되기 때문에 결과 Result 타입에 두 가지 에러 타입을 받게 할 수도 없습니다.</p>
+<p>함수를 쪼개는 방법도 가능하겠지만 너무 귀찮은 일이고 보통은 다이내믹 디스패치를 이용합니다. <code>Result&lt;T, Box&lt;dyn std::error::Error&gt;</code>와 같은 식으로요.</p>
+<blockquote>
+<p>dynamic dispatch: 시그니처에서 특정 타입을 지정하지 않고 trait을 지정. 해당 trait을 구현한 타입이면 모두 받을 수 있음</p>
+</blockquote>
+<h2><a class="header" href="#에러를-받은-상위-함수에서-할-수-있는-일들" id="에러를-받은-상위-함수에서-할-수-있는-일들">에러를 받은 상위 함수에서 할 수 있는 일들</a></h2>
+<ul>
+<li>사용할 경우</li>
+<li>사용할 도구들
+<ul>
+<li>downcast</li>
+<li>downcast_mut</li>
+<li>downcast_ref</li>
+</ul>
+</li>
+</ul>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../1_trait_type/1_keyword_type.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../3_error/1_error_handling_on_the_function.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../2_confusing/1_self_Self.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../3_error/3_using_custom_error.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -187,13 +254,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../1_trait_type/1_keyword_type.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../3_error/1_error_handling_on_the_function.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="../2_confusing/1_self_Self.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../3_error/3_using_custom_error.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

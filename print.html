@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="1_trait_type/index.html"><strong aria-hidden="true">1.</strong> trait과 type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1_trait_type/1_keyword_type.html"><strong aria-hidden="true">1.1.</strong> type 키워드</a></li></ol></li><li class="chapter-item expanded "><a href="2_confusing/index.html"><strong aria-hidden="true">2.</strong> 헷갈리는 개념들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2_confusing/1_self_Self.html"><strong aria-hidden="true">2.1.</strong> self, Self</a></li><li class="chapter-item expanded "><a href="2_confusing/2_error.html"><strong aria-hidden="true">2.2.</strong> error</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="1_trait_type/index.html"><strong aria-hidden="true">1.</strong> trait과 type</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1_trait_type/1_keyword_type.html"><strong aria-hidden="true">1.1.</strong> type 키워드</a></li></ol></li><li class="chapter-item expanded "><a href="2_confusing/index.html"><strong aria-hidden="true">2.</strong> 헷갈리는 개념들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2_confusing/1_self_Self.html"><strong aria-hidden="true">2.1.</strong> self, Self</a></li></ol></li><li class="chapter-item expanded "><a href="3_error/index.html"><strong aria-hidden="true">3.</strong> error를 처리하는 여러 가지 방법들</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3_error/1_error_handling_on_the_function.html"><strong aria-hidden="true">3.1.</strong> 에러가 발생한 함수에서 에러를 처리할 경우</a></li><li class="chapter-item expanded "><a href="3_error/2_bubbling.html"><strong aria-hidden="true">3.2.</strong> 에러를 해당 함수 밖으로 보내서 처리하는 방법</a></li><li class="chapter-item expanded "><a href="3_error/3_using_custom_error.html"><strong aria-hidden="true">3.3.</strong> 좀 더 일반적인 프로젝트에서 쓸 수 있는 방법: 커스텀 에러 이용</a></li><li class="chapter-item expanded "><a href="3_error/4_using_error_chain_crate.html"><strong aria-hidden="true">3.4.</strong> 많이 쓰는 방식: error_chain</a></li><li class="chapter-item expanded "><a href="3_error/5_useful_crates.html"><strong aria-hidden="true">3.5.</strong> 에러 처리에 사용하는 다양한 라이브러리들</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -367,36 +367,10 @@ impl I for F {
 <li>self: 해당 블록의 모듈</li>
 <li>Self: 해당 블록의 타입. 그런데 trait 정의와 구현 블록에서만 사용 가능.</li>
 </ul>
-<h1><a class="header" href="#error" id="error">error</a></h1>
-<p>계속 에러가 뜨면 혈압이 오른다. 특히 에러 때문에 에러가 뜨면 심각하게 혈압이 오른다.</p>
-<h2><a class="header" href="#대원칙" id="대원칙">대원칙</a></h2>
-<ul>
-<li>
-<p>std::result::Result&lt;T, E&gt;는 enum이고</p>
-<ul>
-<li>T에는 모든 타입이 올 수 있고</li>
-<li>E에는 std:error::Error trait을 구현한 타입은 모두 올 수 있음</li>
-</ul>
-</li>
-<li>
-<p>panic!은 꽤 편하지만 제대로 무언가를 만들려면 안 쓰게 됨</p>
-<ul>
-<li>여러 가지 문제가 있음</li>
-</ul>
-</li>
-<li>
-<p>여러 자료를 봤을 때 가장 일반적인 방법은 error_chain 크레이트를 사용해서 Error와 Result를 필요할 때마다 지정해주는 것</p>
-<ul>
-<li>러스트 쿡북에서도 모두 이 방식을 적용
-<ul>
-<li>그런데 코드에는 가려놓아서 확장버튼을 눌러서 확인해야 함</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2><a class="header" href="#에러를-처리하는-여러가지-방법들" id="에러를-처리하는-여러가지-방법들">에러를 처리하는 여러가지 방법들</a></h2>
-<p>이 장은 <a href="http://www.sheshbabu.com/posts/rust-error-handling/">블로그글</a>을 많이 재정리했음을 미리 밝힙니다. 예시 코드도 일부 사용했습니다. 그런데 완전히 번역하지는 않았습니다.</p>
+<h1><a class="header" href="#에러를-처리하는-여러가지-방법들" id="에러를-처리하는-여러가지-방법들">에러를 처리하는 여러가지 방법들</a></h1>
+<p>계속 에러가 뜨면 혈압이 오른다. 특히 에러 때문에 에러가 뜨면 심각하게 혈압이 오릅니다.</p>
+<p>이번 장에서는 러스트의 수많은 에러 처리 방법들을 알아본 후에 실무적으로 사용하기 좋은 방식들을 정리해볼 것입니다.
+이 장은 <a href="http://www.sheshbabu.com/posts/rust-error-handling/">블로그글</a>의 구성을 많이 참고했습니다. 예시 코드도 일부 사용했습니다.</p>
 <p>아래에 나오는 대부분의 방법은 match를 이용한 코드로 변환할 수 있습니다. 가급적이면 match 구문으로 변환한것도 같이 넣었습니다.
 유용한 매크로와 다양한 숏컷 메서드들이 있는 것은 러스트의 장점이기도 하고 또 남의 코드를 읽는 입장에서 가장 큰 장벽이기도 합니다.(저는 장벽이라는 입장입니다...) 알아두시면 남의 코드를 읽을 때 도움이 되리라고 생각합니다.</p>
 <p><a href="https://doc.rust-lang.org/book/ch09-00-error-handling.html">러스트 북</a>에서는 초기에 회복할 수 없는 에러와 회복할 수 있는 에러로 나눠서 설명을 하고 있습니다. 문제는 모듈화된 코드를 작성한 후에 에러 핸들링을 따로 다루지 않는 겁니다. 그래서 &quot;북&quot;을 보고 나서도 에러핸들링을 하려면 갑갑해지죠.(제가 그랬다고요...)</p>
@@ -405,9 +379,46 @@ impl I for F {
 <li>에러가 발생한 함수에서 에러를 처리하는 경우(튜토리얼같은 아주 가벼운 프로그램)</li>
 <li>에러가 발생한 함수의 상위 함수에서 에러를 처리하는 경우(보통의 프로그램)</li>
 </ul>
-<h2><a class="header" href="#에러가-발생한-함수에서-에러를-처리할-경우" id="에러가-발생한-함수에서-에러를-처리할-경우">에러가 발생한 함수에서 에러를 처리할 경우</a></h2>
-<p>튜토리얼을 보면 대부분 이렇게 처리하지만 사실 제대로 된 프로그램을 만들면 이렇게 처리할 일이 많지는 않습니다. 특히 러스트는 일반적으로 모듈 기능을 광범위하게 사용하기 때문에 특히 그렇습니다. <a href="2_confusing/2_error.html###_%EC%97%90%EB%9F%AC%EA%B0%80_%EB%82%98%EB%A9%B4_%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84_%EC%A0%9C%EA%B3%B5%ED%95%B4%EC%84%9C_%EB%84%98%EC%96%B4%EA%B0%84%EB%8B%A4.">에러가 났을 때 기본값을 넘기는 기능</a>은</p>
-<h3><a class="header" href="#에러가-나면-그냥-프로그램을-종료시킨다" id="에러가-나면-그냥-프로그램을-종료시킨다">에러가 나면 그냥 프로그램을 종료시킨다.</a></h3>
+<h2><a class="header" href="#대원칙" id="대원칙">대원칙</a></h2>
+<ul>
+<li>일반적으로 러스트 함수의 결과값은 Result 타입 사용.
+<ul>
+<li>기본적인 Result타입 즉 std::result::Result&lt;T, E&gt;는 enum이고
+<ul>
+<li>T에는 모든 타입이 올 수 있고</li>
+<li>E에는 std:error::Error trait을 구현한 타입은 모두 올 수 있음</li>
+</ul>
+</li>
+<li>일반적으로 프로젝트에서는 Error trait을 구현한 자체 Error 타입과 Result 타입을 래핑한 자체 Result 타입을 사용</li>
+</ul>
+</li>
+<li>자체 Error, Result 타입을 만드는 방식을 자동화시키는 크레이트들이 있고 그 중 대표적인 것이 <code>error_chain</code>.
+<ul>
+<li>러스트 쿡북에서도 모두 이 방식을 적용
+그냥 귀찮으면 여기까지만 알면 됩니다.</li>
+</ul>
+</li>
+</ul>
+<p>하지만 이 책을 쓰는 건 그런 목적이 아니니까 더 정리해보죠.</p>
+<ul>
+<li>러스트의 에러 처리 방식은 크게 두 가지
+<ul>
+<li>에러가 발생하면 당장 프로그램을 종료(panic!)</li>
+<li>에러가 발생해도 당장 종료하지는 않음(Result&lt;T, E&gt;의 E에 에러를 넣어서 반환)</li>
+</ul>
+</li>
+<li>앞에서 말했듯이 일반적인 프로젝트에서는 Result 타입 사용</li>
+<li>panic!은 꽤 편하지만 제대로 무언가를 만들려면 안 쓰게 됨
+<ul>
+<li>여러 가지 문제가 있으며</li>
+</ul>
+</li>
+<li></li>
+<li>여러 자료를 봤을 때 가장 일반적인 방법은 error_chain 크레이트를 사용해서 Error와 Result를 필요할 때마다 지정해주는 것</li>
+</ul>
+<h1><a class="header" href="#에러가-발생한-함수에서-에러를-처리할-경우" id="에러가-발생한-함수에서-에러를-처리할-경우">에러가 발생한 함수에서 에러를 처리할 경우</a></h1>
+<p>튜토리얼을 보면 대부분 이렇게 처리하지만 사실 제대로 된 프로그램을 만들면 이렇게 처리할 일이 많지는 않습니다. 특히 러스트는 일반적으로 모듈 기능을 광범위하게 사용하기 때문에 특히 그렇습니다. <a href="3_error/1_error_handling_on_the_function.html###_%EC%97%90%EB%9F%AC%EA%B0%80_%EB%82%98%EB%A9%B4_%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84_%EC%A0%9C%EA%B3%B5%ED%95%B4%EC%84%9C_%EB%84%98%EC%96%B4%EA%B0%84%EB%8B%A4.">에러가 났을 때 기본값을 넘기는 기능</a>은</p>
+<h2><a class="header" href="#에러가-나면-그냥-프로그램을-종료시킨다" id="에러가-나면-그냥-프로그램을-종료시킨다">에러가 나면 그냥 프로그램을 종료시킨다.</a></h2>
 <p>이용할 경우</p>
 <ul>
 <li>프로토타이핑이니까 에러 신경 쓸 시간에 개발을 더 하자.
@@ -452,7 +463,7 @@ fn main() {
 <p>그 때 사용할 수 있는 가장 원시적인 수준의 방식이 <code>unwrap</code>입니다. <code>unwrap</code>은 말 그대로 앞의 결과물을 열어보는 것입니다. Result&lt;T, E&gt;를 받아서 T이면 T의 값을 반환하고 E이면 panic을 일으키는 거죠. 사실 아무 것도 안 한다고 보시면 됩니다.</p>
 <p>넘겨받은 값을 unwrap했더니 에러이면 어떻게 될까요? panic이 발생하고 프로그램은 종료됩니다. panic에 대해서 모르는 분은 이 책보다는 <a href="https://doc.rust-lang.org/book/ch09-01-unrecoverable-errors-with-panic.html">러스트북</a> 내용을 참고하세요. 이 문서의 내용과도 겹칩니다.</p>
 <p>언어를 배울 때 나오는 예시 코드에서는 <code>unwrap</code>을 많이 사용합니다. 특히 입문 단계의 코드에서요. 하지만 그건 더 이상 설명을 피하기 위해서 임시방편으로 쓰는 것입니다. 실제 작동할 코드에서 unwrap을 쓰는 건 추천하지 않습니다.</p>
-<h3><a class="header" href="#에러가-나면-과거의-내가-보낸-메시지를-보여주면서-종료시킨다" id="에러가-나면-과거의-내가-보낸-메시지를-보여주면서-종료시킨다">에러가 나면 과거의 내가 보낸 메시지를 보여주면서 종료시킨다.</a></h3>
+<h2><a class="header" href="#에러가-나면-과거의-내가-보낸-메시지를-보여주면서-종료시킨다" id="에러가-나면-과거의-내가-보낸-메시지를-보여주면서-종료시킨다">에러가 나면 과거의 내가 보낸 메시지를 보여주면서 종료시킨다.</a></h2>
 <ul>
 <li>
 <p>이용할 경우</p>
@@ -493,7 +504,7 @@ fn main() {
 </code></pre></pre>
 <p>고작 문구 하나 더 띄우는게 unwrap과 뭐가 다르냐고 생각하실 수 있습니다. 하지만 은근히 도움이 되긴 합니다.(그래도 연습용 프로젝트 이외에는 쓰지 마세요.) 러스트 컴파일러는 물론 상당히 친절해서 에러 메시지를 잘 읽어보면 원인을 상당히 많이 추론할 수 있습니다. 그렇지만 일단 에러 메시지가 뜨는 순간 우리의 이성은 에러 메시지를 &quot;잘 읽기&quot; 힘든 상태가 되는 경향이 있습니다.</p>
 <p>코딩하던 과거의 내가 적어놓은 걱정이 에러와 같이 나온다면 그나마 혼란에 빠진 지금의 나에게 도움이 될 수 있습니다.</p>
-<h3><a class="header" href="#에러가-나면-기본값을-제공해서-넘어간다" id="에러가-나면-기본값을-제공해서-넘어간다">에러가 나면 기본값을 제공해서 넘어간다.</a></h3>
+<h2><a class="header" href="#에러가-나면-기본값을-제공해서-넘어간다" id="에러가-나면-기본값을-제공해서-넘어간다">에러가 나면 기본값을 제공해서 넘어간다.</a></h2>
 <ul>
 <li>
 <p>이용할 경우</p>
@@ -536,7 +547,8 @@ fn main() {
   println!(&quot;{}&quot;, content)
 }
 </code></pre></pre>
-<h3><a class="header" href="#에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다" id="에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다">에러를 일단 상위 모듈로 올려서 조치를 취하고 싶다.</a></h3>
+<h1><a class="header" href="#에러를-해당-함수-밖으로-보내서-처리하는-방법" id="에러를-해당-함수-밖으로-보내서-처리하는-방법">에러를 해당 함수 밖으로 보내서 처리하는 방법</a></h1>
+<h2><a class="header" href="#에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다" id="에러를-일단-상위-모듈로-올려서-조치를-취하고-싶다">에러를 일단 상위 모듈로 올려서 조치를 취하고 싶다.</a></h2>
 <ul>
 <li>
 <p>이용할 경우</p>
@@ -583,7 +595,7 @@ fn file() -&gt; Result&lt;T, E&gt; {
   Ok(date)
 }
 </code></pre></pre>
-<h3><a class="header" href="#한-함수에서-여러-종류의-에러가-발생하는-경우" id="한-함수에서-여러-종류의-에러가-발생하는-경우">한 함수에서 여러 종류의 에러가 발생하는 경우</a></h3>
+<h2><a class="header" href="#한-함수에서-여러-종류의-에러가-발생하는-경우" id="한-함수에서-여러-종류의-에러가-발생하는-경우">한 함수에서 여러 종류의 에러가 발생하는 경우</a></h2>
 <p>러스트에서 &quot;에러&quot;는 특정한 타입을 이야기하는 것이 아닙니다. 공부할 때 꽤나 골치아프게 했었을 trait을 이용해서 정의됩니다. std::error::Error trait을 구현한 모든 타입은 &quot;에러&quot;인 거죠.</p>
 <p>그래서 흔히 때에 맞는 에러를 만들어서 씁니다. 왠만한 라이브러리에서도 자기네 에러를 만들어 쓰고 프로그램을 만들때도 전용 에러들을 만들어서 쓰는 경우가 많습니다.</p>
 <p>그래서 한 가지 함수에서 여러 종류의 에러가 발생할 수도 있죠. 그런데 타입 유니언이 안 되기 때문에 결과 Result 타입에 두 가지 에러 타입을 받게 할 수도 없습니다.</p>
@@ -591,7 +603,7 @@ fn file() -&gt; Result&lt;T, E&gt; {
 <blockquote>
 <p>dynamic dispatch: 시그니처에서 특정 타입을 지정하지 않고 trait을 지정. 해당 trait을 구현한 타입이면 모두 받을 수 있음</p>
 </blockquote>
-<h3><a class="header" href="#에러를-받은-상위-함수에서-할-수-있는-일들" id="에러를-받은-상위-함수에서-할-수-있는-일들">에러를 받은 상위 함수에서 할 수 있는 일들</a></h3>
+<h2><a class="header" href="#에러를-받은-상위-함수에서-할-수-있는-일들" id="에러를-받은-상위-함수에서-할-수-있는-일들">에러를 받은 상위 함수에서 할 수 있는 일들</a></h2>
 <ul>
 <li>사용할 경우</li>
 <li>사용할 도구들
@@ -602,17 +614,338 @@ fn file() -&gt; Result&lt;T, E&gt; {
 </ul>
 </li>
 </ul>
-<h2><a class="header" href="#좀-더-일반적인-프로젝트에서-쓸-수-있는-방법-커스텀-에러-이용" id="좀-더-일반적인-프로젝트에서-쓸-수-있는-방법-커스텀-에러-이용">좀 더 일반적인 프로젝트에서 쓸 수 있는 방법: 커스텀 에러 이용</a></h2>
+<h1><a class="header" href="#좀-더-일반적인-프로젝트에서-쓸-수-있는-방법-커스텀-에러-이용" id="좀-더-일반적인-프로젝트에서-쓸-수-있는-방법-커스텀-에러-이용">좀 더 일반적인 프로젝트에서 쓸 수 있는 방법: 커스텀 에러 이용</a></h1>
 <p>라이브러리 방식으로 이용되는 프로그램은 커스텀 에러를 만들어서 사용하는 것이 바람직합니다.</p>
-<h3><a class="header" href="#커스텀-에러-만들기" id="커스텀-에러-만들기">커스텀 에러 만들기</a></h3>
+<h2><a class="header" href="#커스텀-에러-만들기" id="커스텀-에러-만들기">커스텀 에러 만들기</a></h2>
 <p>하나의 함수에서 여러 가지 종류의 에러가 발생하더라도 enum으로 하나의 커스텀 에러를 만들어서 내보내는 것이 좋습니다.</p>
-<h3><a class="header" href="#커스텀-에러를-상위-함수로-보내기" id="커스텀-에러를-상위-함수로-보내기">커스텀 에러를 상위 함수로 보내기</a></h3>
-<h3><a class="header" href="#커스텀-에러를-받아서-핸들링하기" id="커스텀-에러를-받아서-핸들링하기">커스텀 에러를 받아서 핸들링하기</a></h3>
-<h2><a class="header" href="#다양한-라이브러리" id="다양한-라이브러리">다양한 라이브러리</a></h2>
-<h3><a class="header" href="#error-result-제작" id="error-result-제작">Error, Result 제작</a></h3>
+<h2><a class="header" href="#커스텀-에러를-상위-함수로-보내기" id="커스텀-에러를-상위-함수로-보내기">커스텀 에러를 상위 함수로 보내기</a></h2>
+<h2><a class="header" href="#커스텀-에러를-받아서-핸들링하기" id="커스텀-에러를-받아서-핸들링하기">커스텀 에러를 받아서 핸들링하기</a></h2>
+<h1><a class="header" href="#많이-쓰는-방식-error_chain" id="많이-쓰는-방식-error_chain">많이 쓰는 방식: error_chain</a></h1>
+<p>결과적으로 러스트의 에러 처리는 꽤 귀찮고 반복적인 코드를 계속 만들어야 하는 문제가 있습니다. 프로그래머들이 이런 걸 그냥 둘 리가 없죠. Rustecean(러스트 사용자)들도 당연히 여러 가지 라이브러리를 통해 해결하고 있습니다. 이번 장에서는 그 중에 제가 보기에 가장 편리해 보이는 <a href="https://crates.io/crates/error-chain"><code>error_chain</code></a>을 다뤄보도록 하겠습니다.<a href="https://rust-lang-nursery.github.io/rust-cookbook/">러스트 쿡북</a>에서도 사용하는 걸 봐서는 저만 편리하게 여기는 것 같지는 않네요.(둘 다 <code>rust-lang-nursery</code>에서 관리하는 리포지터리이긴 합니다. 즉 러스트 팀에서 관리하는(했던) 리포지터리입니다.)</p>
+<blockquote>
+<p><code>rust-lang-nursery</code>는 <a href="https://internals.rust-lang.org/t/rust-lang-nursery-deprecation/11205/3">19년 말에 운영 종료를 선언</a>했습니다. 원래 러스트 레포지터리에 올라가기에 아직 부족하지만 꽤 유용한 크레이트들을 관리하려는 목적으로 2017년 경에 만들어졌는데 crates.io가 활성화되니까 굳이 이걸 따로 관리해야하냐, 일만 많아진다는 의견들이 나왔습니다. 그래서 mdbook 등 주요 레포지터리들은 러스트 레포지터리로 옮겼습니다. 그런데... 쿡북과 error_chain은 옮기지도 않고 문을 닫지도 않았습니다. 2017년 이후 관리자가 없어서 관리가 안 된다는 이야기가 있었으나 2020년부터 다시 업데이트가 시작되었거든요.(그런데 리포지터리를 안 옮기고 있습니다) 그래서 저도 쓰고 있습니다.
+솔직히 언제 관리가 끊길 지 잘 모르겠는데 이 정도로 많이 쓰이는 크레이트면 러스트 문법에 넣는게 맞지 않겠나 싶긴 합니다. 러스트는 아직 유저가 적어서 많이 쓰이지만 관리가 안 되는 크레이트들이 심지어 러스트 팀이 운영하는 크레이트에도 종종 있습니다. 관리자에 지원해보세요.</p>
+</blockquote>
+<h2><a class="header" href="#error_chain-라이브러리의-특징" id="error_chain-라이브러리의-특징">error_chain 라이브러리의 특징</a></h2>
+<ul>
+<li>간단한 오류처리부터 복잡한 오류처리까지 일관적인 방법을 제공합니다.
+<ul>
+<li>이게 핵심인데 이건 기본 문법이 해줘야 하는 것 아닌가요...</li>
+</ul>
+</li>
+<li>오류의 원인(Error trait의 cause 메서드)을 체계적으로 관리하게 해줍니다.
+<ul>
+<li>이것도 기본 문법이 해줘야 하는 것 아닌가요...</li>
+</ul>
+</li>
+</ul>
+<p>다시 말씀드리지만 <code>error_chain</code>은 뭔가 어마어마한 것을 제공하지 않습니다. '기본문법에서 왜 이걸 제공하지 않지?'라는 생각이 드는 것들을 제공합니다.</p>
+<h3><a class="header" href="#error_chain-매크로" id="error_chain-매크로">error_chain! 매크로</a></h3>
+<p><code>error_chain!</code> 매크로는 <code>error_chain</code> 라이브러리의 핵심이라고 할 수 있습니다. 아래 두 가지 기능을 한 방에 제공하기 때문입니다.</p>
+<ul>
+<li>커스텀 에러 등 반복적으로 생성해야 하는 타입들을 생성</li>
+<li>From trait을 해당 커스텀 에러에 구현 -&gt; <code>?</code>연산자 사용 가능</li>
+</ul>
+<h3><a class="header" href="#error-구조체" id="error-구조체">Error 구조체</a></h3>
+<p>커스텀 에러도 Error라고 이름짓는 것은 러스트의 전통이죠. <code>error_chain</code>의 Error 구조체는 아래 두 가지로 구성되어 있는 튜플 구조체입니다.</p>
+<ul>
+<li>State: 러스트의 기본 Error에서 생성된 내용을 받아주는 역할
+<ul>
+<li>백트레이스: 에러가 처음 발생했을 때 기록</li>
+<li>Error::cause()의 결과물들이 연결된 에러체인: 처음 발생한 에러가 에러를 '버블링'해서 윗단계로 넘겨주면 단계가 올라갈 때마다 내용을 '체인'에 저장</li>
+</ul>
+</li>
+<li>ErrorKind: enum. 에러의 종류를 표시</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum ErrorKind {
+  Inner(ErrorKind), // 다른 에러체인으로 연결된다는 의미. 매크로에서 links를 쓰면 Inner(ErrorKind).
+  Io(Error),        // std::io::Error 타입이라는 의미. 매크로에서 foreign_links를 쓰면 Io(Error).
+  Msg(String),      // 간단한 에러로 스트링을 받았을 때의 ErrorKind.
+  Custom,           // 그 외의 커스텀 에러를 받았을 때의 ErrorKind.
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2><a class="header" href="#한-번-써봅시다" id="한-번-써봅시다">한 번 써봅시다.</a></h2>
+<p>주절주절 말로 써도 사실 코드를 보는게 이해가 훨씬 빠릅니다.</p>
+<h3><a class="header" href="#에러타입-선언하기" id="에러타입-선언하기">에러타입 선언하기</a></h3>
+<p>에러타입을 선언하기 위해서는 error_chain! 매크로를 사용합니다. 해당 메크로를 사용해서 하나의 파일이나 모듈에 크레이트 전체를 위한 에러 타입을 지정할 수 있습니다. <code>error_chain</code>의 <a href="https://docs.rs/error-chain/">공식문서</a>에 나오는 코드로 살펴보겠습니다.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error_chain! {
+    // 아래 types는 기본값입니다. 코딩하지 않아도 자동으로 설정됩니다.
+    types {
+        Error, ErrorKind, ResultExt, Result;  // 이름을 이렇게 짓는 것은 전통이라고 생각합니다.
+    }
+    // 에러체인들이 여러 개가 있을 수도 있겠죠. links는 그 에러체인들 사이를 연결하는 방법입니다.
+    // 역시 아래 내용은 적지 않아도 됩니다.
+    links {
+        Another(other_error::Error, other_error::ErrorKind) #[cfg(unix)];
+    }
+    // error_chain!으로 정의하지 않은 에러들도 있을 수 있습니다. foreign_links는 그러한 에러를 연결하는 방법입니다.
+    // 역시 아래 내용은 적지 않아도 됩니다.
+    foreign_links {
+        Fmt(::std::fmt::Error);
+        Io(::std::io::Error) #[cfg(unix)];
+    }
+    // ErrorKind에 들어갈 내용들을 더 정의할 수도 있습니다.
+    // 여기에 정의해두면 ErrorKind에 들어가서 해당 에러 종류를 선택할 수 있습니다.
+    // 각각의 에러에서 정해진 description, display 메서드를 사용해서 자체 메시지를 띄울 수 있습니다.
+    // 역시 아래 내용은 적지 않아도 됩니다.
+    errors {
+        InvalidToolchainName(t: String) {
+            description(&quot;invalid toolchain name&quot;)
+            display(&quot;invalid toolchain name: '{}'&quot;, t)
+        }
+        UnknownToolchainVersion(v: String) {
+            description(&quot;unknown toolchain version&quot;),
+            display(&quot;unknown toolchain version: '{}'&quot;, v),
+        }
+    }
+    // skip_msg_variant가 남아있으면 Error::Msg를 사용해서 간단한 메시지를 띄우는 에러를 처리할 수 있습니다.
+    skip_msg_variant
+    // 커스텀 에러타입들을 나열하면 모두 ErrorKind에 포함됩니다.
+    FooError,
+    BarError,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h3><a class="header" href="#에러-타입-사용하기" id="에러-타입-사용하기">에러 타입 사용하기</a></h3>
+<p><code>error_chain</code>에서 만들어준 커스텀 에러를 사용해봅시다. 여기서는 3가지 방법을 사용할 것입니다.</p>
+<ul>
+<li>.into(): 각 ErrorKind 타입에서 사용할 수 있는 메서드</li>
+<li><code>?</code>: 위의 메서드를 단순화한 연산자</li>
+<li>bail!: 같은 기능을 좀 더 간결하게 쓸 수 있는 매크로</li>
+</ul>
+<p>러스트의 문법은 늘 같은 기능을 구현하는 방법이 너무 많다는 느낌이 듭니다.</p>
+<h4><a class="header" href="#into-메서드" id="into-메서드">.into() 메서드</a></h4>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error_chain! {
+    errors { FooError }
+}
+
+fn foo() -&gt; Result&lt;()&gt; {
+    Err(ErrorKind::FooError.into())
+}
+
+fn bar() -&gt; Result&lt;()&gt; {
+    Err(&quot;bar error!&quot;.into())
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>.into()</code> 메서드는 ErrorKind(스트링 포함)를 받아서 매크로에서 정한 Error 타입으로 변환합니다. 보통은 아래와 같이 줄여서 씁니다.</p>
+<h4><a class="header" href="#-연산자" id="-연산자">? 연산자</a></h4>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error_chain! {
+    errors { FooError }
+}
+
+fn foo() -&gt; Result&lt;()&gt; {
+    Ok(Err(ErrorKind::FooError)?)
+}
+
+fn bar() -&gt; Result&lt;()&gt; {
+    Ok(Err(&quot;bar error!&quot;)?)
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>?</code>앞이 에러가 나올 경우에는 매크로에서 정한 Error로 처리하는 겁니다. 에러가 아니면 Ok로 처리하고요.</p>
+<h4><a class="header" href="#bail-매크로" id="bail-매크로">bail! 매크로</a></h4>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error_chain! {
+    errors { FooError }
+}
+
+fn foo() -&gt; Result&lt;()&gt; {
+    if true {
+      bail!{ErrorKind::FooError};
+    } else {
+      Ok(())
+    }
+}
+
+fn bar() -&gt; Result&lt;()&gt; {
+    if true {
+      bail!{&quot;bar error!&quot;};
+    } else {
+      Ok(())
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>이 예제에서는 엄청난 효과가 있다고 느끼기 힘들지만 match 구문 등에서 사용할 때 꽤 유용합니다. 그리고 직관적이죠. 앞에서는 왜 Ok()로 <code>?</code> 연산자를 둘러싸는지 잘 이해가 안 가니까요. 그럼에도 너무 종류가 많다는 생각은 듭니다.(엄격하게 보면 <code>error_chain</code>이 외부 라이브러리긴 합니다만.)</p>
+<h3><a class="header" href="#에러들을-체이닝해봅시다" id="에러들을-체이닝해봅시다">에러들을 체이닝해봅시다.</a></h3>
+<p>라이브러리 이름이 <code>error_chain</code>이니까 에러들을 하나씩 쓰는 게 목적은 아니겠죠?</p>
+<ul>
+<li>Result 타입에서 chain_err() 메서드 사용
+<ul>
+<li>Result가 Err이면 chain_err은 즉각 인자로 들어온 클로져를 평가해서 ErrorKind로 변환가능한 결과를 반환</li>
+</ul>
+</li>
+<li>Error 타입에서</li>
+</ul>
+<h2><a class="header" href="#예시1-main에서-에러-다루기" id="예시1-main에서-에러-다루기">예시1: main에서 에러 다루기</a></h2>
+<p><code>error_chain</code>을 사용하기에 아주 좋은 사례입니다. 물론 std::io::Error, <code>?</code> 연산자를 쓰면 어렵지 않게 처리가 가능합니다만.</p>
+<p>러스트 쿡북의 <a href="https://rust-lang-nursery.github.io/rust-cookbook/errors/handle.html#handle-errors-correctly-in-main">에러 핸들링</a>에서 가져온 예시를 봅시다.</p>
+<pre><pre class="playground"><code class="language-rust">use error_chain::error_chain;     // error_chain이 2017년~2019년 동안 관리가 잘 안 되어서 예전 방식의 extern crate을 써놓은 예시들이 꽤 남아있는데 그냥 use쓰면 됩니다.
+
+use std::fs::File;
+use std::io::Read;
+
+error_chain!{                     // 매크로를 선언해서 커스텀 타입(Error, Result, ErrorKind, ResultExt)을 만듭니다.
+    foreign_links {               // foreign_links를 통해 두 가지 에러를 ErrorKind에 포함시킵니다.
+        Io(std::io::Error);
+        ParseInt(::std::num::ParseIntError);
+    }
+}
+
+fn read_uptime() -&gt; Result&lt;u64&gt; {
+    let mut uptime = String::new();
+    File::open(&quot;/proc/uptime&quot;)?       // 에러 가능 지점1: std::io::Error
+      .read_to_string(&amp;mut uptime)?;  // 에러 가능 지점2: std::io::Error
+
+    Ok(uptime
+        .split('.')
+        .next()                             // 옵션 반환
+        .ok_or(&quot;Cannot parse uptime data&quot;)? // 반환된 옵션을 Result로 변환하면서 None이면 에러 반환-&gt;에러 가능 지점3: Err(E)-&gt; 별도의 msg가 없음-&gt;스트링을 받아서 Msg로 가지고 버블링
+        .parse()?)                          // 에러 가능 지점4: std::num::ParseIntError
+}
+
+fn main() {
+    match read_uptime() {
+        Ok(uptime) =&gt; println!(&quot;uptime: {} seconds&quot;, uptime), // 아무 에러가 없으면 parse()의 결과에 따라 u64타입의 숫자가 uptime에 들어감
+        Err(err) =&gt; eprintln!(&quot;error: {}&quot;, err),              // 위의 네 가지 에러 중 하나가 걸리면 state에 내용을 가지고 올라와서 err에 들어감
+    };
+}
+</code></pre></pre>
+<h2><a class="header" href="#예시2-에러의-타입이-바뀌어도-에러가-없어지진-않습니다" id="예시2-에러의-타입이-바뀌어도-에러가-없어지진-않습니다">예시2: 에러의 타입이 바뀌어도 에러가 없어지진 않습니다</a></h2>
+<p><code>error_chain</code>을 쓰면 함수에서 에러의 타입을 간단하게 변환할 수 있습니다. 물론 그 전에 ErrorKind에 해당 에러타입을 추가해둬야겠죠.
+아래 예시도 러스트 쿡북의 예시를 가져왔습니다. <a href="3_error/./3_error/3_using_custom_error.html">앞 장</a>에서 다뤘던 커스텀에러와 똑같은 방법인데 커스텀 에러, 커스텀 Result를 따로 지정하지 않아도 되니 훨씬 간단해집니다.</p>
+<pre><pre class="playground"><code class="language-rust">// reqwest를 사용하기 때문에 해당 크레이트를 Cargo.toml에 넣어야합니다.
+use error_chain::error_chain;
+
+error_chain! {
+    foreign_links {
+        Io(std::io::Error);
+        Reqwest(reqwest::Error);                  // 이런 식으로 새로운 라이브러리에서 만들어놓은 Error 타입을 추가하면 됩니다.
+        ParseIntError(std::num::ParseIntError);
+    }
+    errors { RandomResponseError(t: String) }     // 만들어 쓰실 커스텀 에러는 여기에 추가하면 됩니다.
+}
+
+fn parse_response(response: reqwest::blocking::Response) -&gt; Result&lt;u32&gt; {
+  let mut body = response.text()?;                // 에러가능위치1: reqwest::Error
+  body.pop();
+  body
+    .parse::&lt;u32&gt;()
+    .chain_err(|| ErrorKind::RandomResponseError(body)) // parse 메서드의 결과물은 Result인데 여기에 .chain_err()를 체이닝했습니다. .chain_err의 인자에 들어간 ErrorKind의 원소가 에러 타입이 됩니다. 에러가능위치2: RandomResponseError
+    // map_err 메서드를 써서 아래와 같이 적어도 되겠죠.
+    // body
+    //  .parse::&lt;u32&gt;()
+    //  .map_err(|e| Error::with_chain(e, ErrorKind::RandomResponseError(body)))
+}
+
+fn run() -&gt; Result&lt;()&gt; {
+  let url =
+    format!(&quot;https://www.random.org/integers/?num=1&amp;min=0&amp;max=10&amp;col=1&amp;base=10&amp;format=plain&quot;);
+  let response = reqwest::blocking::get(&amp;url)?;         // 에러가능위치3: reqwest::Error
+  let random_value: u32 = parse_response(response)?;    // 에러1이나 2가 나왔으면 에러가 나오겠죠. 여기서의 에러타입은 두 개의 타입을 모두 가질 수 있는 Error가 됩니다.
+  println!(&quot;a random number between 0 and 10: {}&quot;, random_value);
+  Ok(())
+}
+
+fn main() {
+  if let Err(error) = run() {                                               // run()의 결과가 에러 1, 2, 3 중 하나 때문에 Err(error)일 때
+    match *error.kind() {
+      ErrorKind::Io(_) =&gt; println!(&quot;Standard IO error: {:?}&quot;, error),       // 에러의 종류를 불러내는 메서드를 써서 *error.kind()가 무엇인지에 따라서 다르게 처리합니다. 앞 장에서 버블링해서 올린 에러를 어떻게 처리할 지를 다룬 내용과 동일한 방식입니다.
+      ErrorKind::Reqwest(_) =&gt; println!(&quot;Reqwest error: {:?}&quot;, error),
+      ErrorKind::ParseIntError(_) =&gt; println!(&quot;Standard parse int error: {:?}&quot;, error),
+      ErrorKind::RandomResponseError(_) =&gt; println!(&quot;User defined error: {:?}&quot;, error),
+      _ =&gt; println!(&quot;Other error: {:?}&quot;, error),
+    }
+  }
+}
+
+</code></pre></pre>
+<h2><a class="header" href="#복잡한-오류에서-백트레이스-확보하기" id="복잡한-오류에서-백트레이스-확보하기">복잡한 오류에서 백트레이스 확보하기</a></h2>
+<p>여러 겹으로 쌓인 에러 체인은 iterator처럼 출력 가능한데 들어간 순서와 반대로 출력됩니다. 스택처럼요.</p>
+<pre><pre class="playground"><code class="language-rust">use error_chain::error_chain;
+use serde::Deserialize;
+
+use std::fmt;
+
+error_chain! {
+    foreign_links {
+        Reader(csv::Error);               // 에러 타입에 포함되어야 할 에러를 적습니다
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct Rgb {
+    red: u8,
+    blue: u8,
+    green: u8,
+}
+
+impl Rgb {
+    fn from_reader(csv_data: &amp;[u8]) -&gt; Result&lt;Rgb&gt; {
+        let color: Rgb = csv::Reader::from_reader(csv_data)
+            .deserialize()
+            .nth(0)
+            .ok_or(&quot;Cannot deserialize the first CSV record&quot;)?  // Option을 Result로 변환. None이면 에러 메시지1 추가
+            .chain_err(|| &quot;Cannot deserialize RGB color&quot;)?;     // Result에서 에러가 나올 경우 에러 메시지2 추가
+
+        Ok(color)
+    }
+}
+
+impl fmt::UpperHex for Rgb {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        let hexa = u32::from(self.red) &lt;&lt; 16 | u32::from(self.blue) &lt;&lt; 8 | u32::from(self.green);
+        write!(f, &quot;{:X}&quot;, hexa)
+    }
+}
+
+fn run() -&gt; Result&lt;()&gt; {
+    let csv = &quot;red,blue,green
+102,256,204&quot;;
+
+    let rgb = Rgb::from_reader(csv.as_bytes())                // 에러1이 발생할 경우 여기서 에러
+      .chain_err(|| &quot;Cannot read CSV data&quot;)?;                 // 그러면 여기서 에러 메시지3 추가
+    println!(&quot;{:?} to hexadecimal #{:X}&quot;, rgb, rgb);
+
+    Ok(())
+}
+
+fn main() {
+    if let Err(ref errors) = run() {                          // run()에서 에러가 발생하면
+        eprintln!(&quot;Error level - description&quot;);               // 에러 메시지 헤드 출력
+        errors
+            .iter()
+            .enumerate()
+            .for_each(|(index, error)| eprintln!(&quot;└&gt; {} - {}&quot;, index, error));  // 에러 메시지 3 출력-&gt;에러 메시지 2 출력 -&gt; 에러메시지 1 출력 -&gt; 기본 에러메시지 출력
+
+        if let Some(backtrace) = errors.backtrace() {
+            eprintln!(&quot;{:?}&quot;, backtrace);                     // 백트레이스 나머지가 있으면 여기서 출력(RUST_BACKTRACE=1일 경우)
+        }
+    }
+}
+
+</code></pre></pre>
+<h1><a class="header" href="#에러-처리에-사용하는-다양한-라이브러리들" id="에러-처리에-사용하는-다양한-라이브러리들">에러 처리에 사용하는 다양한 라이브러리들</a></h1>
+<h2><a class="header" href="#error-result-제작" id="error-result-제작">Error, Result 제작</a></h2>
 <p>anyhow-&gt;eyre
 error_chain</p>
-<h3><a class="header" href="#커스텀에러-제작시에-유용한-매크로" id="커스텀에러-제작시에-유용한-매크로">커스텀에러 제작시에 유용한 매크로</a></h3>
+<h2><a class="header" href="#커스텀에러-제작시에-유용한-매크로" id="커스텀에러-제작시에-유용한-매크로">커스텀에러 제작시에 유용한 매크로</a></h2>
 <p>thiserror
 SNAFU</p>
 
